@@ -18,24 +18,42 @@ class Conductor extends Model
         return $query->where('identificacion', $identificacion);
     }
 
-    protected $fillable = [
-        'nombre',
-        'apellido',
-        'sexo',
-        'email',
-        'tipo_identificacion',
-        'identificacion',
-        'tipo_casa',
-        'ciudad',
-        'barrio',
-        'direccion',
-        'telefono',
-        'telefono_opcional',
-        'departamento'
-    ];
+    protected $guarded = [];
+    // protected $fillable = [
+    //     'nombre',
+    //     'apellido',
+    //     'sexo',
+    //     'email',
+    //     'tipo_identificacion',
+    //     'identificacion',
+    //     'tipo_casa',
+    //     'ciudad',
+    //     'barrio',
+    //     'direccion',
+    //     'telefono',
+    //     'telefono_opcional',
+    //     'departamento'
+    // ];
 
     public function getFullnameAttribute()
     {
         return $this->attributes['nombre'] . ' ' . $this->attributes['apellido'];
+    }
+
+    public function emergency_contacts()
+    {
+        return $this->hasMany(EmergencyContact::class);
+    }
+    public function documento_conductors()
+    {
+        return $this->hasMany(DocumentoConductor::class);
+    }
+    public function servicios()
+    {
+        return $this->hasMany(Servicio::class);
+    }
+    public function vehiculos()
+    {
+        return $this->belongsToMany(Vehiculo::class);
     }
 }

@@ -9,12 +9,12 @@
     </a>
 
     <a href="javascript:void(0)" class="tooltip-wrapper" data-toggle="modal" data-placement="top"
-        data-target="#modalConductorRegister" title="Registrar">
+        data-target="#modalDesignadoRegister" title="Registrar">
         <i class="fa fa-edit btn btn-icon text-success"></i>
     </a>
 
     <h5 class="m-2">
-        <i class="fa fa-group"></i> Conductores
+        <i class="fa fa-group"></i> Designados
     </h5>
 
 </div>
@@ -24,7 +24,8 @@
         <div class="card card-statistics">
             <div class="card-body">
                 <div class="export-table-wrapper table-responsive">
-                    <table class="table table-bordered " style="color:black" id="dataTableConductores" width="100%" cellspacing="0">
+                    <table class="table table-bordered " style="color:black" id="dataTableDesignados" width="100%"
+                        cellspacing="0">
                         <thead class="thead">
                             <tr>
                                 <th>S. No</th>
@@ -46,11 +47,11 @@
 </div>
 
 
-@include('admin.conductores.partials.formUpdate')
-@include('admin.conductores.partials.formRegister')
+@include('admin.designados.partials.formUpdate')
+@include('admin.designados.partials.formRegister')
 @stop
 
 @section('scripts')
-<script src="{{ asset('/js/apiConductor.js') }}"></script>
-<script defer src="{{ asset('/js/conductoresListener.js') }}"></script>
+<script src="{{ asset('/js/apiDesignado.js') }}"></script>
+<script defer src="{{ asset('/js/designadosListener.js') }}"></script>
 @endsection

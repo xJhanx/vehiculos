@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DesignadoByCompany extends Model
 {
     protected $connection = 'company';
+    protected $table = 'designados';
 
     public function getRouteKeyName()
     {
@@ -20,6 +21,7 @@ class DesignadoByCompany extends Model
 
     protected $fillable = [
         'nombre',
+        'empresa',
         'apellido',
         'sexo',
         'email',

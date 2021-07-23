@@ -24,15 +24,16 @@ class SolicitudController extends Controller
      */
     public function index(Request $request)
     {
+        
         if ($request->expectsJson()) {
-            return datatables(Servicio::where('Estado', 'PENDIENTE')->latest())
+            return datatables(Servicio::with('empresa')->where('estado', '<>', 'Servicio realizado' )->latest())
                 ->addColumn('action', 'admin.solicitudes.actions')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->toJson();
         }
 
-        Log::critical(json_encode(Auth::user()->name));
+        // Log::critical(json_encode(Auth::user()->name));
         return view('admin.solicitudes.index');
     }
 

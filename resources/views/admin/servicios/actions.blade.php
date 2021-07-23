@@ -8,8 +8,11 @@
         <i class="fa fa-fw fa-trash"></i>
     </a> -->
 
-    <a class="btn btn-round btn-sm btn-icon btn-success delete-cliente" href="javascript:void(0)" onclick="verServicio({{$id}})" data-toggle="tooltip"
-        title="ver detalles">
-        <i class="fa fa-fw fa-eye"></i>
-    </a>
+
+@can('isAdmin')
+<a class="btn btn-round btn-sm btn-icon btn-success delete-cliente" href="javascript:void(0)" onclick="verServicio({{$id}})" data-toggle="tooltip"
+    title="ver detalles">
+    <i class="fa fa-fw fa-eye"></i>
+</a>
+@endcan
 </div>

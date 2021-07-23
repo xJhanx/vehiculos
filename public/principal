@@ -1,0 +1,107 @@
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Versión del servidor:         5.7.24 - MySQL Community Server (GPL)
+-- SO del servidor:              Win64
+-- HeidiSQL Versión:             10.2.0.5599
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+-- Volcando estructura para tabla operac_principal.failed_jobs
+CREATE TABLE IF NOT EXISTS `failed_jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla operac_principal.failed_jobs: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
+
+-- Volcando estructura para tabla operac_principal.migrations
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla operac_principal.migrations: ~24 rows (aproximadamente)
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+	(49, '2014_10_12_000000_create_users_table', 1),
+	(50, '2014_10_12_100000_create_password_resets_table', 1),
+	(51, '2019_06_29_042456_create_elementos_table', 1),
+	(52, '2019_08_19_000000_create_failed_jobs_table', 1),
+	(53, '2019_09_24_050620_create_clientes_table', 1),
+	(54, '2019_10_03_055953_create_proveedors_table', 1),
+	(55, '2019_10_03_162707_create_locacions_table', 1),
+	(56, '2019_10_03_174121_create_vehiculos_table', 1),
+	(57, '2019_10_05_155538_create_mantenimientos_table', 1),
+	(58, '2019_10_06_234139_create_propietarios_table', 1),
+	(59, '2019_10_07_173021_create_recomendacions_table', 1),
+	(60, '2019_10_08_145858_create_notify_fechas_table', 1),
+	(61, '2019_10_08_145937_create_notify_kms_table', 1),
+	(62, '2019_10_10_051939_create_documentacions_table', 1),
+	(63, '2019_10_24_204134_create_historial_c_s_table', 1),
+	(64, '2019_10_24_205953_create_contratos_table', 1),
+	(65, '2019_10_24_210423_create_inventarios_table', 1),
+	(66, '2019_10_24_210449_create_productos_table', 1),
+	(67, '2019_10_25_003705_create_kits_table', 1),
+	(68, '2019_10_25_055437_create_informe_m_g_s_table', 1),
+	(69, '2019_10_26_060117_create_autopartes_table', 1),
+	(70, '2019_10_26_164949_create_relacions_table', 1),
+	(71, '2019_10_31_164525_create_historial_r_e_s_table', 1),
+	(72, '2019_11_04_230907_create_hallazgos_table', 1);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+
+-- Volcando estructura para tabla operac_principal.password_resets
+CREATE TABLE IF NOT EXISTS `password_resets` (
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla operac_principal.password_resets: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
+
+-- Volcando estructura para tabla operac_principal.users
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `role` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `funcionario_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Volcando datos para la tabla operac_principal.users: ~4 rows (aproximadamente)
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` (`id`, `name`, `company`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `role`, `funcionario_id`) VALUES
+	(3, 'transportesriogrande@gmail.com', 'operac_riogrande', 'mantenimientostrg@gmail.com', NULL, '$2y$10$SchZOl3raTvD0g6X7qQSc.ocx7SMrE5YQttwoKBRE2eBhvrezFjAC', '4VIeKMBP6AdgcxZnoA7kbh0A1dFa2bDQnjFQXLaAY9mtO8XnkIC7QraH8jy5', '2019-12-21 23:08:57', '2019-12-21 23:08:57', 'gerente', NULL),
+	(5, 'Transporteinfantas@hotmail.es', 'operac_infantas', 'Hseqinfantas@gmail.com', NULL, '$2y$10$icEuDgV5Rz3.7jQ.ddpKEev4GKsxdpVaBeh9TGikRYNu67aNCOpw2', 'm18WU70uOpuZAkb53Doe957vjgrM5ZLFRjGfHlcGzNs8JKd5uBeKcqtfm4La', '2019-12-21 23:11:45', '2019-12-21 23:11:45', 'gerente', NULL),
+	(13, 'infantas@gmail.com', 'operac_riogrande', 'infantas@gmail.com', NULL, '$2y$10$0EUeYWmn2Z804y6v71tCb..scjfy4.6w134lxY0ZbTzTOFnopjNMS', NULL, '2021-07-06 10:01:40', '2021-07-06 10:01:40', 'cliente', 6),
+	(14, 'info@bgsoluciones.com.co', 'operac_riogrande', 'info@bgsoluciones.com.co', NULL, '$2y$10$5R.GQowNWXmv5FV/x800HuQaFeZnnioYuq1F5.8r3DVoT06lP..7O', NULL, '2021-07-06 10:10:14', '2021-07-06 10:10:14', 'administrador', 9),
+	(15, 'admin@admin.com', 'operac_riogrande', 'admin@admin.com', NULL, '$2y$10$12j724nGW1acIXIDFdGrI.SOEHnDS/W5QTKTufgNvNjgt7D3LKtsG', NULL, '2021-07-06 10:13:39', '2021-07-06 10:13:39', 'designado', 13);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

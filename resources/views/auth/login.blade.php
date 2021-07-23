@@ -1,66 +1,41 @@
 @extends('layouts.app')
 
+@section('styles')
+        <link href="{{asset('css/customlogin.css')}}" rel="stylesheet">
+@endsection
+
 @section('content')
-<nav class="navbar navbar-expand navbar-dark  topbar mb-4 static-top">
 
-    <a class="nav-link text-primary " href="{{ url('/') }}" role="button" aria-expanded="false">
-        <i class="fa fa-home"></i>
-        Home
-    </a>
-
-    <ul class="navbar-nav ml-auto ">
-
-        <li class="nav-item dropdown no-arrow mx-1">
-            @if (Route::has('login'))
-            <div class="top-right links">
-                @auth
-
-        <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link text-primary " href="{{ url('/home') }}" role="button" aria-haspopup="true"
-                aria-expanded="false">
-                <span class="badge badge-danger badge-counter">Home</span>
-            </a>
-
-        </li>
-        @else
-        @if (Route::has('register'))
-
-        <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link text-primary " href="{{ route('login') }}" role="button" aria-haspopup="true"
-                aria-expanded="false">
-                Login
-            </a>
-
-        </li>
-        <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link text-primary " href="{{ route('register') }}" role="button" aria-haspopup="true"
-                aria-expanded="false">
-                Register
-            </a>
-        </li>
-        @endif
-        @endauth
-        @endif
-        </li>
-        <div class="topbar-divider d-none d-sm-block"></div>
-    </ul>
-</nav>
-<div class="container">
-
-    <div class="row justify-content-center my-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+<!--<div class="container p-5" id="container">-->
+	<!--<div class="form-container sign-up-container">-->
+	<!--	<form action="#">-->
+	<!--		<h1>Create Account</h1>-->
+	<!--		<div class="social-container">-->
+	<!--			<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>-->
+	<!--			<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>-->
+	<!--			<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>-->
+	<!--		</div>-->
+	<!--		<span>or use your email for registration</span>-->
+	<!--		<input type="text" placeholder="Name" />-->
+	<!--		<input type="email" placeholder="Email" />-->
+	<!--		<input type="password" placeholder="Password" />-->
+	<!--		<button>Sign Up</button>-->
+	<!--	</form>-->
+	<!--</div>-->
+	<div class="form-container sign-in-container">
+                    
+		<form method="POST" action="{{ route('login') }}">
                         @csrf
-
-                        <div class="form-group row">
-                            <label for="email"
-                                class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
+			<h1>Log in </h1>
+			<div class="social-container">
+				<!--<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>-->
+				<!--<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>-->
+				<!--<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>-->
+			</div>
+			
+			<span>Ingresa tus Datos</span>
+		
+		<!--<div class="col-md-12">-->
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                                     name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
@@ -69,14 +44,9 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password"
-                                class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
+                            <!--</div>-->
+			
+			<!--<div class="col-md-12">-->
                                 <input id="password" type="password"
                                     class="form-control @error('password') is-invalid @enderror" name="password"
                                     required autocomplete="current-password">
@@ -86,39 +56,32 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                        {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                            <!--</div>-->
+			
+			
+			<button type="submit">Ingresar</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<!--<div class="overlay-panel overlay-left">-->
+			<!--	<h1>Welcome Back!</h1>-->
+			<!--	<p>To keep connected with us please login with your personal info</p>-->
+			<!--	<button class="ghost" id="signIn">Sign In</button>-->
+			<!--</div>-->
+			<div class="overlay-panel overlay-right">
+			    
+			    <img class="img img-fluid" src="{{asset('img/undraw_navigator_a479.png')}}"></img>
+			    
+				<!--<h1>Hello, Friend!</h1>-->
+				<small class="text text-info"> Comienza haciendo lo que es necesario, después lo posible y de repente estarás haciendo lo imposible. 
+				<br>
+				(San Francisco de Asís)</small>
+				<!--<button class="ghost" id="signUp">Sign Up</button>-->
+			</div>
+		</div>
+	</div>
+<!--</div>-->
 @endsection
+
+

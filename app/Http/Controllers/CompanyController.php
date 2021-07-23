@@ -72,7 +72,7 @@ class CompanyController extends Controller
 
     public function show(Company $company)
     {
-        return view('admin.clientes.show', compact('cliente'));
+        return view('admin.clientes.show', compact('company'));
     }
 
 

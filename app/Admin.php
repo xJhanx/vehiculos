@@ -17,22 +17,24 @@ class Admin extends Model
     {
         return $query->where('identificacion', $identificacion);
     }
+    
+    protected $guarded = [];
 
-    protected $fillable = [
-        'nombre',
-        'apellido',
-        'sexo',
-        'email',
-        'tipo_identificacion',
-        'identificacion',
-        'tipo_casa',
-        'ciudad',
-        'barrio',
-        'direccion',
-        'telefono',
-        'telefono_opcional',
-        'departamento'
-    ];
+    // protected $fillable = [
+    //     'nombre',
+    //     'apellido',
+    //     'sexo',
+    //     'email',
+    //     'tipo_identificacion',
+    //     'identificacion',
+    //     'tipo_casa',
+    //     'ciudad',
+    //     'barrio',
+    //     'direccion',
+    //     'telefono',
+    //     'telefono_opcional',
+    //     'departamento'
+    // ];
 
     public function getFullnameAttribute()
     {

@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content ">
 
-            <div class="card-header text-dark">Registrar Service
+            <div class="card-header text-dark">Registrar Service.
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 

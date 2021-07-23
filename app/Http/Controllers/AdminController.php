@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Admin;
 use App\Http\Requests\AdminSaveRequest;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-
-
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -47,7 +47,15 @@ class AdminController extends Controller
 
         if ($request->expectsJson()) {
             try {
-                Admin::create(request()->all());
+                $admin =  Admin::create(request()->all());
+                User::create([
+                    'name' => request()->get('email'),
+                    'company' => Auth::user()->company,
+                    'email' => request()->get('email'),
+                    'password' => Hash::make(request()->get('identificacion')),
+                    'role' => 'administrador',
+                    'funcionario_id' => $admin->id,
+                ]);
                 return response('Admin registrado correctamente', 200);
             } catch (\Throwable $th) {
                 return  response($th->getMessage(), 500);

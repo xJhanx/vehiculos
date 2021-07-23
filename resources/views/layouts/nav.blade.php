@@ -25,19 +25,23 @@
             </div>
         </li>
 
+        @can('isGerente')
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" title=" Documentacion de vehiculos" href="{{route('documentos.todos')}}"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="text-danger fas fa-download fa-fw"></i>
             </a>
         </li>
+        @endcan
 
+        @can('isGerente')
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="text-primary fas fa-bell fa-fw"></i>
                 <span class="badge badge-danger badge-counter">+</span>
             </a>
+            
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
@@ -188,6 +192,7 @@
                 <a class="dropdown-item text-center small text-gray-500" href="#">View All Taks</a>
             </div> --}}
         </li>
+        @endcan
         <div class="topbar-divider d-none d-sm-block"></div>
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"

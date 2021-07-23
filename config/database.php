@@ -43,14 +43,20 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+        'testing' => [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ],
+
         'main' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'operac_principal'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', 'secret'),
+           'database' => env('DB_DATABASE', 'operac_main_'),
+            'username' => env('DB_USERNAME', 'operac_Angell'),
+            'password' => env('DB_PASSWORD', 'Angell00-7'),
             'options' => [PDO::ATTR_EMULATE_PREPARES => true],
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
@@ -69,9 +75,9 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'operac_riogrande'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', 'secret'),
+             'database' => env('DB_DATABASE', 'operac_services'),
+            'username' => env('DB_USERNAME', 'operac_Angell'),
+            'password' => env('DB_PASSWORD', 'Angell00-7'),
             'options' => [PDO::ATTR_EMULATE_PREPARES => true],
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
@@ -145,7 +151,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

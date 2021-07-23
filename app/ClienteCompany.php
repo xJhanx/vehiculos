@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class ClienteCompany extends Model
 {
     protected $connection = 'company';
-    protected $table = 'clientecompanies';
+
+    protected $table = 'cliente_companies';
 
     public function getRouteKeyName()
     {
@@ -18,25 +19,27 @@ class ClienteCompany extends Model
     {
         return $query->where('identificacion', $identificacion);
     }
+    
+    protected $guarded = [];
 
-    protected $fillable = [
-        'nombre',
-        'apellido',
-        'sexo',
-        'email',
-        'tipo_identificacion',
-        'identificacion',
-        'tipo_casa',
-        'ciudad',
-        'barrio',
-        'direccion',
-        'telefono',
-        'telefono_opcional',
-        'departamento'
-    ];
+    // protected $fillable = [
+    //     'nombre',
+    //     'apellido',
+    //     'sexo',
+    //     'email',
+    //     'tipo_identificacion',
+    //     'identificacion',
+    //     'tipo_casa',
+    //     'ciudad',
+    //     'barrio',
+    //     'direccion',
+    //     'telefono',
+    //     'telefono_opcional',
+    //     'departamento'
+    // ];
 
     public function getFullnameAttribute()
     {
-        return $this->attributes['nombre'] . ' ' . $this->attributes['apellido'];
+        return $this->attributes['nombre'] . ' ';
     }
 }

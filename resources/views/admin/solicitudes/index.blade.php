@@ -3,16 +3,21 @@
 
 <div class="ml-auto d-flex align-items-center secondary-menu text-center m-2">
 
-    <a href="javascript:history.back()" class="tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Regresar">
+    <a href="javascript:history.back()" class="tooltip-wrapper" data-toggle="tooltip" data-placement="top" title=""
+        data-original-title="Regresar">
         <i class="fa fa-reply text-info"></i>
     </a>
+    
+    @can('isDesignado')
 
-    <a href="javascript:void(0)" class="tooltip-wrapper" data-toggle="modal" data-placement="top" data-target="#modalConductorRegister" title="Registrar">
+    <a href="{{url('register-service')}}" class="tooltip-wrapper" data-placement="top" title="Registrar">
         <i class="fa fa-edit btn btn-icon text-success"></i>
     </a>
 
+    @endcan
+    
     <h5 class="m-2">
-        <i class="fa fa-group"></i> Servicios
+                <i class="fa fa-group"></i> Solicitud de servicios.
     </h5>
 
 </div>
@@ -22,15 +27,15 @@
         <div class="card card-statistics">
             <div class="card-body">
                 <div class="export-table-wrapper table-responsive">
-                    <table class="table table-bordered " style="color:black" id="dataTableServicios" width="100%" cellspacing="0">
+                    <table class="table table-bordered " style="color:black" id="dataTableServicios" width="100%"
+                        cellspacing="0">
                         <thead class="thead">
                             <tr>
                                 <th>S. No</th>
                                 <th>Fecha Solicitado</th>
                                 <th>Fecha Programdo</th>
-                                <th>Conductor</th>
-                                <th>Vehiculo</th>
-                                <!-- <th>Empresa</th> -->
+                                <th>Empresa</th>
+                                <th>Nit Empresa</th>
                                 <th>Punto inicio</th>
                                 <th>Punto fin </th>
                                 <th>Estado</th>
@@ -45,9 +50,6 @@
     </div>
 </div>
 
-
-<!-- @include('admin.servicios.partials.formUpdate') -->
-<!-- @include('admin.servicios.partials.formRegister') -->
 @stop
 
 @section('scripts')

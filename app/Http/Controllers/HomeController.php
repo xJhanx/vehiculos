@@ -26,7 +26,24 @@ class HomeController extends Controller
      */
     public function index()
     {
-
+        if (Auth::user()->role == 'superGerente') {
+            return  redirect()->route('admins.index');
+        }
+        if (Auth::user()->role == 'gerente') {
+            return  redirect()->route('clientes.index');
+        }
+        if (Auth::user()->role == 'administrador') {
+            return  redirect()->route('clientescompany.index');
+        }
+        if (Auth::user()->role == 'conductor') {
+            return  redirect()->route('servicios.index');
+        }
+        if (Auth::user()->role == 'designado') {
+            return  redirect()->route('servicios.index');
+        }
+        if (Auth::user()->role == 'cliente') {
+            return  redirect()->route('designados.index');
+        }
         return  redirect()->route('clientes.index');
     }
 }

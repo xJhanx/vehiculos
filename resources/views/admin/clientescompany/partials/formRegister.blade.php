@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content ">
 
-            <div class="card-header text-dark">Registrar ClienteCompany
+            <div class="card-header text-dark">Registrar Compañia
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
@@ -14,20 +14,15 @@
                         <div class="row">
 
                             <div class="form-group col-md-6">
-                                <label class="text-dark"> Nombres </label>
-                                <input type="text" class="form-control" name="nombre" placeholder="nombre">
+                                <label class="text-dark"> Nombre Empresa </label>
+                                <input type="text" class="form-control" name="nombre" placeholder="">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="text-dark">Apellidos </label>
-                                <input type="text" class="form-control" name="apellido" placeholder="Last Name">
-                            </div>
+                            
 
                             <div class="form-group col-md-6">
                                 <label class="text-dark">Tipo de Identificación</label>
                                 <select class="form-control" name="tipo_identificacion">
                                     <option disabled selected> Selecciona...</option>
-                                    <option value="Cedula">Cedula</option>
-                                    <option value="Passport">Passport</option>
                                     <option value="Nit">Nit</option>
                                     <option value="Otro">Otro</option>
                                 </select>
@@ -45,33 +40,63 @@
 
 
                             <div class="form-group col-md-6">
+                                <label class="text-dark">Numero Contrato</label>
+                                <input type="text" class="form-control" name="num_contrato" placeholder="">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label class="text-dark">Objeto Contrato</label>
+                                <input type="text" class="form-control" name="obj_contrato" placeholder="">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label class="text-dark">Fecha inicio contrato</label>
+                                <input type="date" class="form-control"  name="inicio_contrato" placeholder="">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label class="text-dark">Fecha fin contrato</label>
+                                <input type="date" class="form-control"  name="fin_contrato" placeholder="">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label class="text-dark">Fecha renovación contrato</label>
+                                <input type="date" class="form-control"  name="renovacion_contrato" placeholder="">
+                            </div>
+                            
+                             <div class="form-group col-md-6">
+                                <label class="text-dark">Nombre del administrador del contrato </label>
+                                <input type="text" class="form-control" name="admin" placeholder="">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
                                 <label class="text-dark">Ciudad</label>
-                                <input type="text" class="form-control" name="ciudad" placeholder="ciudad">
+                                <input type="text" class="form-control" name="ciudad" placeholder="">
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label class="text-dark">Departamento</label>
-                                <input type="text" class="form-control" name="departamento" placeholder="Dpto">
+                                <input type="text" class="form-control" name="departamento" placeholder="">
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label class="text-dark">Dirección</label>
-                                <input type="text" class="form-control" name="direccion" placeholder="Address">
+                                <input type="text" class="form-control" name="direccion" placeholder="">
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label class="text-dark">Barrio</label>
-                                <input type="text" class="form-control" name="barrio" placeholder="Barrio">
+                                <input type="text" class="form-control" name="barrio" placeholder="">
                             </div>
 
-                            <div class="form-group col-md-3">
-                                <label class="text-dark">Telefono</label>
-                                <input type="phone" class="form-control" name="telefono" placeholder="Telefono">
+                            <div class="form-group col-md-9">
+                                <label class="text-dark">Contacto del administrador del contrato </label>
+                                <input type="phone" class="form-control" name="telefono" placeholder="">
                             </div>
 
                             <div class="form-group col-md-3">
                                 <label class="text-dark">Telefono (opcional)</label>
-                                <input type="phone" class="form-control" name="opcional_telefono" placeholder="Telefono ">
+                                <input type="phone" class="form-control" name="opcional_telefono" placeholder="">
                             </div>
 
                             <div class="form-group">

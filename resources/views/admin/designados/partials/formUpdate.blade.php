@@ -1,14 +1,14 @@
-<div class="modal fade --" tabindex="-1" role="dialog" data-backdrop="static" data-ajax-modal id="modalConductorUpdate">
+<div class="modal fade --" tabindex="-1" role="dialog" data-backdrop="static" data-ajax-modal id="modalDesignadoUpdate">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content ">
 
-            <div class="card-header text-dark">Actualizar Conductor
+            <div class="card-header text-dark">Actualizar Designado
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <div class="card-body">
 
-                <form id="formConductorUpdate" method="" action="{{route('conductores.update')}}">
+                <form id="formDesignadoUpdate" method="" action="{{route('designados.update')}}">
                     @csrf
                     @method('PATCH')
                     <div class="modal-body">
@@ -88,7 +88,7 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="submit" class="btn btn-outline-info " id="btnUpdateConductor" value="Enviar">
+                                <input type="submit" class="btn btn-outline-info " id="btnUpdateDesignado" value="Enviar">
                                 <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>

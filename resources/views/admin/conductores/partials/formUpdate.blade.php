@@ -17,7 +17,7 @@
                             <input type="hidden" name="id" id="id">
 
                             <div class="form-group col-md-6">
-                                <label class="text-dark"> Nombres </label>
+                                <label class="text-dark"> Nombres. </label>
                                 <input type="text" class="form-control" ="" name="nombre"
                                     placeholder="nombre">
                             </div>

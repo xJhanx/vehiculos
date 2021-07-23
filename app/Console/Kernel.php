@@ -22,7 +22,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
        
-            'App\Console\Commands\sendAlerts',
+            \App\Console\Commands\sendAlerts::class,
         
     ];
 

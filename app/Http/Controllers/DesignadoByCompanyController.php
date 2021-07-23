@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Admin;
 use App\DesignadoByCompany as Designado;
 use App\Http\Requests\DesignadoSaveRequest;
+use App\User;
+use App\ClienteCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-
-
+use Illuminate\Support\Facades\Hash;
 
 class DesignadoByCompanyController extends Controller
 {
@@ -25,7 +27,8 @@ class DesignadoByCompanyController extends Controller
     public function index(Request $request)
     {
         if ($request->expectsJson()) {
-            return datatables(Designado::latest())
+            $admin = ClienteCompany::find(Auth::user()->funcionario_id);
+            return datatables(Designado::where('empresa', $admin->identificacion)->latest())
                 ->addColumn('action', 'admin.designados.actions')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
@@ -47,7 +50,21 @@ class DesignadoByCompanyController extends Controller
 
         if ($request->expectsJson()) {
             try {
-                Designado::create(request()->all());
+                
+                $designado = Designado::create(request()->all());
+                $admin = ClienteCompany::find(Auth::user()->funcionario_id);
+                $designado->empresa = $admin->identificacion;
+                $designado->save();
+
+                User::create([
+                    'name' => request()->get('email'),
+                    'company' => Auth::user()->company,
+                    'email' => request()->get('email'),
+                    'password' => Hash::make(request()->get('identificacion')),
+                    'role' => 'designado',
+                    'funcionario_id' => $designado->id,
+                ]);
+
                 return response('Designado registrado correctamente', 200);
             } catch (\Throwable $th) {
                 return  response($th->getMessage(), 500);
@@ -119,7 +136,8 @@ class DesignadoByCompanyController extends Controller
     public function destroy(Request $request, $id)
     {
         if ($request->expectsJson()) {
-            $cliente = Designado::findOrFail($id)->delete();
+            $Designado = Designado::findOrFail($id)->delete();
+            $User = User::firstWhere('funcionario_id', $id)->delete();
             return response('Designado deleted successfully.');
         }
 

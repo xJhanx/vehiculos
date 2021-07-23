@@ -13,8 +13,7 @@ use App\Vehiculo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-
-
+use Illuminate\Support\Facades\Gate;
 
 class VehiculoController extends Controller
 {
@@ -77,7 +76,7 @@ class VehiculoController extends Controller
         $vehiculo = Vehiculo::with('propietario', 'perfil')->Search($placa)->first();
         if ($vehiculo) {
             $proveedores = Proveedor::get();
-            
+
             $clientes = Cliente::query()->select('id', 'nombre', 'apellido')->get();
             return view('admin.vehiculos.partials.formUpdate', compact('vehiculo', 'proveedores', 'clientes'));
         }
@@ -196,12 +195,12 @@ class VehiculoController extends Controller
             return response(number_format($this->total), 200);
         }
     }
-    
+
     public function search(Request $request)
     {
-        
-        
-        $vehiculo = Vehiculo::with('propietario', 'perfil')->where('placa',request()->get('query'))->first();
+
+
+        $vehiculo = Vehiculo::with('propietario', 'perfil')->where('placa', request()->get('query'))->first();
         if ($vehiculo) {
             $proveedores = Proveedor::query()->select('id', 'nombre', 'apellido')->get();
             $clientes = Cliente::query()->select('id', 'nombre', 'apellido')->get();

@@ -1,15 +1,15 @@
 <div class="modal fade --" tabindex="-1" role="dialog" data-backdrop="static" data-ajax-modal
-    id="modalConductorRegister">
+    id="modalDesignadoRegister">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content ">
 
-            <div class="card-header text-dark">Registrar Conductor
+            <div class="card-header text-dark">Registrar Designado
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <div class="card-body">
 
-                <form id="formConductorRegister" method="POST" action="{{route('conductores.store')}}">
+                <form id="formDesignadoRegister" method="POST" action="{{route('designados.store')}}">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -79,7 +79,7 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="submit" class="btn btn-outline-info " id="btnSaveConductor" value="Enviar">
+                                <input type="submit" class="btn btn-outline-info " id="btnSaveDesignado" value="Enviar">
                                 <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>

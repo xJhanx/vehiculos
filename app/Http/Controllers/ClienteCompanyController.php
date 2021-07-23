@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\ClienteCompany;
 use App\Http\Requests\ClienteCompanySaveRequest;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-
-
+use Illuminate\Support\Facades\Hash;
 
 class ClienteCompanyController extends Controller
 {
@@ -47,7 +47,17 @@ class ClienteCompanyController extends Controller
 
         if ($request->expectsJson()) {
             try {
-                ClienteCompany::create(request()->all());
+            $cliente =    ClienteCompany::create(request()->all());
+
+                User::create([
+                    'name' => request()->get('email'),
+                    'company' => Auth::user()->company,
+                    'email' => request()->get('email'),
+                    'password' => Hash::make(request()->get('identificacion')),
+                    'role' => 'cliente',
+                    'funcionario_id' => $cliente->id,
+                ]);
+
                 return response('ClienteCompany registrado correctamente', 200);
             } catch (\Throwable $th) {
                 return  response($th->getMessage(), 500);
@@ -65,7 +75,7 @@ class ClienteCompanyController extends Controller
     public function edit(Request $request, $id)
     {
         if ($request->expectsJson()) {
-            $cliente = ClienteCompany::findOrFail($id);
+            $cliente = ClienteCompany::firstWhere('id', $id);
             return response($cliente, 200);
         }
         return abort(404);
@@ -83,7 +93,7 @@ class ClienteCompanyController extends Controller
             [
                 'nombre' => 'required',
                 'tipo_identificacion' => 'required',
-                'identificacion' => 'required|numeric|digits_between:1,10|unique:company.clientecompanies,identificacion,' . $request->id,
+                'identificacion' => 'required|numeric|digits_between:1,10|unique:company.cliente_companies,identificacion,' . $request->id,
                 'ciudad' => 'required',
                 'departamento' => 'required',
                 'direccion' => 'required',

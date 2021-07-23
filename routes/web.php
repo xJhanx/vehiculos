@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
@@ -21,124 +23,10 @@ Route::get('/test', function () {
 });
 
 Route::get(
-    '/log',
+    '/log', function (){
+        Log::critical('hi');
+    });
 
-    function () {
-        $companies = DB::connection('main')
-            ->table('users')
-            ->get();
-        $unique = $companies->unique();
-
-        foreach ($unique->values() as $company) {
-
-            Config::set('database.connections.company.database', $company->company);
-            DB::purge('company');
-            $getByDocument = getByDocument();
-            $getByKm = getByKm();
-            $getByDias = getByDias();
-
-            echo Mail::to('angellphp@gmail.com')->send(new NotifyMail($getByDocument, $getByKm, $getByDias));
-        }
-        // echo Mail::to('angellphp@gmail.com')->send(new NotifyMail($getByDocument, $getByKm, $getByDias));
-    }
-);
-
-function getByDocument()
-{
-
-    try {
-        $base = Carbon::now();
-        $date =   $base->addDay(8)->format('Y-m-d');
-        $opera =  $base->addDay(60)->format('Y-m-d');
-        $crititalByDocument = Vehiculo::orWhere('vigencia_tarjeta_operaciones', '<', $opera)
-            ->orWhere('vigencia_tecnomecanica', '<', $date)
-            ->orWhere('vigencia_soat', '<', $date)
-            ->orWhere('vigencia_poliza_tr', '<', $date)
-            ->orWhere('vigencia_poliza_ct', '<', $date)
-            ->orWhere('vigencia_poliza_ex_ct', '<', $date)->toBase()->get();
-
-        $byTarjeta = collect($crititalByDocument)->filter(function ($vehiculo) use ($opera) {
-            return $vehiculo->vigencia_tarjeta_operaciones < $opera && $vehiculo->vigencia_tarjeta_operaciones != null;
-        });
-        $byTecnomecanica = collect($crititalByDocument)->filter(function ($vehiculo) use ($date) {
-            return $vehiculo->vigencia_tecnomecanica < $date && $vehiculo->vigencia_tecnomecanica != null;
-        });
-        $byPolizaTtr = collect($crititalByDocument)->filter(function ($vehiculo) use ($date) {
-            return $vehiculo->vigencia_poliza_tr < $date && $vehiculo->vigencia_poliza_tr != null;
-        });
-        $byPolizaTtc = collect($crititalByDocument)->filter(function ($vehiculo) use ($date) {
-            return $vehiculo->vigencia_poliza_ct < $date && $vehiculo->vigencia_poliza_ct != null;
-        });
-        $bySoat = collect($crititalByDocument)->filter(function ($vehiculo) use ($date) {
-            return $vehiculo->vigencia_soat < $date && $vehiculo->vigencia_soat != null;
-        });
-        $byPolizaEx = collect($crititalByDocument)->filter(function ($vehiculo) use ($date) {
-            return $vehiculo->vigencia_poliza_ex_ct < $date && $vehiculo->vigencia_poliza_ex_ct != null;
-        });
-        return [
-            'byTarjeta' =>  $byTarjeta,
-            'byTecnomecanica' =>  $byTecnomecanica,
-            'byPolizaTtr' => $byPolizaTtr,
-            'byPolizaTtc' => $byPolizaTtc,
-            'bySoat' =>  $bySoat,
-            'byPolizaEx' => $byPolizaEx,
-        ];
-    } catch (\Throwable $th) {
-        throw $th->getMessage();
-    }
-}
-
-function getByKm()
-{
-
-    $crititalByKm = array();
-
-    try {
-        Vehiculo::all()->each(function ($vehiculo) use ($crititalByKm) {
-            Recomendacion::with('parte')->where('vehiculo_id', $vehiculo->id)->get()
-                ->each(function ($recomendacion) use ($vehiculo, $crititalByKm) {
-                    if ($recomendacion->parte != null) {
-                        if ($recomendacion->parte->evaluacion == 'kms') {
-                            if (($vehiculo->km_actual + 1500) >= $recomendacion->km_siguiente) {
-                                array_push($crititalByKm, $vehiculo);
-                            }
-                        }
-                    }
-                });
-        });
-
-        return $crititalByKm;
-    } catch (\Throwable $th) {
-        return $th->getMessage();
-    }
-}
-
-
-function getByDias()
-{
-
-    $crititalByDias = array();
-
-    try {
-
-        Vehiculo::all()->each(function ($vehiculo) use ($crititalByDias) {
-            Recomendacion::with('parte')->where('vehiculo_id', $vehiculo->id)->get()
-                ->each(function ($recomendacion) use ($vehiculo, $crititalByDias) {
-                    if ($recomendacion->parte != null) {
-                        if ($recomendacion->parte->evaluacion == 'dias') {
-                            if ((Carbon::now()->addDay(8)) >= $recomendacion->fecha_siguiente) {
-                                array_push($crititalByDias, $vehiculo);
-                            }
-                        }
-                    }
-                });
-        });
-
-        return $crititalByDias;
-    } catch (\Throwable $th) {
-        return $th->getMessage();
-    }
-}
 
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('config:clear');
@@ -148,108 +36,108 @@ Route::get('/clear-cache', function () {
     return 'DONE'; //Return anything
 });
 
-Route::post('/enviar', 'ClienteController@contact')->name('enviar');
+Route::post('/enviar', 'ClienteController@contact')->name('enviar')->middleware('can:isGerente');
 
-Route::get('/apigetproveedors', 'ProveedorController@get');
+Route::get('/apigetproveedors', 'ProveedorController@get')->middleware('can:isGerente');
 
 //Clientes
-Route::resource('/clientes', 'ClienteController', ['except' => 'update']);
-Route::patch('/clientes/update', 'ClienteController@update')->name('clientes.update');
+Route::resource('/clientes', 'ClienteController', ['except' => 'update'])->middleware('can:isGerente');;
+Route::patch('/clientes/update', 'ClienteController@update')->name('clientes.update')->middleware('can:isGerente');
 
 //Proveedores
-Route::resource('/proveedors', 'ProveedorController', ['except' => 'update']);
-Route::patch('/proveedors/update', 'ProveedorController@update')->name('proveedors.update');
+Route::resource('/proveedors', 'ProveedorController', ['except' => 'update'])->middleware('can:isGerente');;
+Route::patch('/proveedors/update', 'ProveedorController@update')->name('proveedors.update')->middleware('can:isGerente');
 
 //Lavados
 
-Route::resource('/lavados', 'LavadoController', ['except' => 'update', 'index']);
-Route::get('/lavados/auto/{placa}', 'LavadoController@index');
-Route::patch('/lavados/update', 'LavadoController@update')->name('lavados.update');
+Route::resource('/lavados', 'LavadoController', ['except' => 'update', 'index'])->middleware('can:isManagmentMantenimientos');
+Route::get('/lavados/auto/{placa}', 'LavadoController@index')->middleware('can:isManagmentMantenimientos');
+Route::patch('/lavados/update', 'LavadoController@update')->name('lavados.update')->middleware('can:isManagmentMantenimientos');
 
 
 //Proveedores
-Route::resource('/partes', 'ParteController', ['except' => 'update']);
-Route::patch('/partes/update', 'ParteController@update')->name('partes.update');
+Route::resource('/partes', 'ParteController', ['except' => 'update'])->middleware('can:isGerente');;
+Route::patch('/partes/update', 'ParteController@update')->name('partes.update')->middleware('can:isGerente');
 
 //Propietarios
-Route::resource('/propietarios', 'PropietarioController', ['except' => 'update']);
-Route::patch('/propietarios/update', 'PropietarioController@update')->name('propietarios.update');
+Route::resource('/propietarios', 'PropietarioController', ['except' => 'update'])->middleware('can:isGerente');;
+Route::patch('/propietarios/update', 'PropietarioController@update')->name('propietarios.update')->middleware('can:isGerente');
 
 //Locaciones
-Route::resource('/locacions', 'LocacionController', ['except' => 'update']);
-Route::patch('/locacions/update', 'LocacionController@update')->name('locacions.update');
+Route::resource('/locacions', 'LocacionController', ['except' => 'update'])->middleware('can:isGerente');;
+Route::patch('/locacions/update', 'LocacionController@update')->name('locacions.update')->middleware('can:isGerente');
 
 //Vehiculos
-Route::resource('/vehiculos', 'VehiculoController', ['except' => 'update']);
-Route::patch('/vehiculos/update', 'VehiculoController@update')->name('vehiculos.update');
-Route::get('/vehiculos/getTotal/{id}', 'VehiculoController@getTotal');
+Route::resource('/vehiculos', 'VehiculoController', ['except' => 'update'])->middleware('can:isManagmentVehiculos');
+Route::patch('/vehiculos/update', 'VehiculoController@update')->name('vehiculos.update')->middleware('can:isManagmentVehiculos');
+Route::get('/vehiculos/getTotal/{id}', 'VehiculoController@getTotal')->middleware('can:isManagmentVehiculos');
 
 //Mantenimientos
 Route::resource('/mantenimientos', 'MantenimientoController', ['only' => ['store', 'destroy', 'edit']]);
-Route::get('/mantenimientos/{placa?}', 'MantenimientoController@index');
-Route::put('/mantenimientos/update', 'MantenimientoController@update')->name('mantenimientos.update');
+Route::get('/mantenimientos/{placa?}', 'MantenimientoController@index')->middleware('can:isManagmentMantenimientos');
+Route::put('/mantenimientos/update', 'MantenimientoController@update')->name('mantenimientos.update')->middleware('can:isManagmentMantenimientos');
 
 //Recomendaciones
-Route::resource('/recomendaciones', 'RecomendacionController');
-Route::patch('/recomendaciones/update', 'RecomendacionController@update')->name('recomendaciones.update');
+Route::resource('/recomendaciones', 'RecomendacionController')->middleware('can:isGerente');
+Route::patch('/recomendaciones/update', 'RecomendacionController@update')->name('recomendaciones.update')->middleware('can:isGerente');
 
 //Notificaciones
-Route::resource('/notifysfecha', 'NotifyFechaController');
-Route::resource('/notifyskm', 'NotifyKmController');
-Route::get('/notifysdias', 'NotifyKmController@dias');
+Route::resource('/notifysfecha', 'NotifyFechaController')->middleware('can:isGerente');
+Route::resource('/notifyskm', 'NotifyKmController')->middleware('can:isGerente');
+Route::get('/notifysdias', 'NotifyKmController@dias')->middleware('can:isGerente');
 
 //Agregar Kilometros
-Route::get('/aggkm', 'VehiculoController@aggkmView')->name('aggkm');
-Route::post('/aggkm', 'VehiculoController@aggkm')->name('aggkm');
+Route::get('/aggkm', 'VehiculoController@aggkmView')->name('aggkm')->middleware('can:isGerente');
+Route::post('/aggkm', 'VehiculoController@aggkm')->name('aggkm')->middleware('can:isGerente');
 
 //Index Documentos
-Route::resource('/documentos', 'DocumentacionController');
+Route::resource('/documentos', 'DocumentacionController')->middleware('can:isGerente');
 
 //index Kots
-Route::resource('/kits', 'KitController');
+Route::resource('/kits', 'KitController')->middleware('can:isGerente');
 
 //Historial Contratos
-Route::resource('/contratos', 'ContratoController', ['only' => 'store']);
-Route::get('/contratos/{placa?}', 'ContratoController@index');
-Route::get('/contratos/{placa?}/edit', 'ContratoController@edit');
-Route::patch('/contratos/update', 'ContratoController@update')->name('contratos.update');
+Route::resource('/contratos', 'ContratoController', ['only' => 'store'])->middleware('can:isManagmentMantenimientos');;
+Route::get('/contratos/{placa?}', 'ContratoController@index')->middleware('can:isManagmentMantenimientos');
+Route::get('/contratos/{placa?}/edit', 'ContratoController@edit')->middleware('can:isManagmentMantenimientos');
+Route::patch('/contratos/update', 'ContratoController@update')->name('contratos.update')->middleware('can:isManagmentMantenimientos');
 
 //Elemento
 Route::resource('/elementos', 'ElementoController', ['except' => ['update', 'index']]);
-Route::get('/elementos/miselementos/{elementos}', 'ElementoController@index')->name('elementos.index');
-Route::patch('/elementos/update', 'ElementoController@update')->name('elementos.update');
+Route::get('/elementos/miselementos/{elementos}', 'ElementoController@index')->name('elementos.index')->middleware('can:isGerente');
+Route::patch('/elementos/update', 'ElementoController@update')->name('elementos.update')->middleware('can:isGerente');
 
 //index Kots
-Route::get('/informemg', 'InformeMGController@mg')->name('informemg');
-Route::get('/informeyg', 'InformeMGController@yg')->name('informeyg');
+Route::get('/informemg', 'InformeMGController@mg')->name('informemg')->middleware('can:isGerente');
+Route::get('/informeyg', 'InformeMGController@yg')->name('informeyg')->middleware('can:isGerente');
 
-Route::get('/informeplan/individual', 'InformeMGController@reportePlan')->name('reportePlan.individual');
+Route::get('/informeplan/individual', 'InformeMGController@reportePlan')->name('reportePlan.individual')->middleware('can:isGerente');
 
 
 //Excel
-Route::get('/descarga/reporte/vista/mes', 'InformeMGController@vistaMes')->name('vista.mes');
-Route::get('/descarga/reporte/vista/anual', 'InformeMGController@vistaAnual')->name('vista.anual');
+Route::get('/descarga/reporte/vista/mes', 'InformeMGController@vistaMes')->name('vista.mes')->middleware('can:isGerente');
+Route::get('/descarga/reporte/vista/anual', 'InformeMGController@vistaAnual')->name('vista.anual')->middleware('can:isGerente');
 
-Route::get('/descarga/plan/vista/anual', 'InformeMGController@vistaPlanAnual')->name('vista.plan.anual');
+Route::get('/descarga/plan/vista/anual', 'InformeMGController@vistaPlanAnual')->name('vista.plan.anual')->middleware('can:isGerente');
 
-Route::get('/descarga/reporte/mes', 'InformeMGController@reporteDescargaMes')->name('reporte.mes');
-Route::get('/descarga/reporte/gobal_mes', 'InformeMGController@reporteDescargaMesGlobal')->name('reporte.global_mes');
+Route::get('/descarga/reporte/mes', 'InformeMGController@reporteDescargaMes')->name('reporte.mes')->middleware('can:isGerente');
+Route::get('/descarga/reporte/gobal_mes', 'InformeMGController@reporteDescargaMesGlobal')->name('reporte.global_mes')->middleware('can:isGerente');
 
-Route::get('/descarga/reporte/year', 'InformeMGController@reporteDescargaYear')->name('reporte.year');
-Route::get('/descarga/reporte/gobal_year', 'InformeMGController@reporteDescargaYearGlobal')->name('reporte.global_year');
+Route::get('/descarga/reporte/year', 'InformeMGController@reporteDescargaYear')->name('reporte.year')->middleware('can:isGerente');
+Route::get('/descarga/reporte/gobal_year', 'InformeMGController@reporteDescargaYearGlobal')->name('reporte.global_year')->middleware('can:isGerente');
 
 
 //Autopartes
-Route::resource('/autopartes', 'AutoparteController', ['except' => 'update']);
-Route::patch('/autopartes/update', 'AutoparteController@update')->name('autopartes.update');
+Route::resource('/autopartes', 'AutoparteController', ['except' => 'update'])->middleware('can:isGerente');;
+Route::patch('/autopartes/update', 'AutoparteController@update')->name('autopartes.update')->middleware('can:isGerente');
 
 //Relacion
-Route::resource('/relacions', 'RelacionController', ['except' => 'update']);
-Route::patch('/relacions/update', 'RelacionController@update')->name('relacions.update');
+Route::resource('/relacions', 'RelacionController', ['except' => 'update'])->middleware('can:isGerente');;
+Route::patch('/relacions/update', 'RelacionController@update')->name('relacions.update')->middleware('can:isGerente');
 
 //index Historial de ejecutados
-Route::get('/historialEjecutado/{recomendacion}', 'HistorialREController@index')->name('ejecutados');
-Route::delete('/historialEjecutado/alls/{id}', 'HistorialREController@destroy');
+Route::get('/historialEjecutado/{recomendacion}', 'HistorialREController@index')->name('ejecutados')->middleware('can:isGerente');
+Route::delete('/historialEjecutado/alls/{id}', 'HistorialREController@destroy')->middleware('can:isGerente');
 
 
 //index Historial de km Registrados
@@ -257,20 +145,20 @@ Route::delete('/historialEjecutado/alls/{id}', 'HistorialREController@destroy');
 Route::get('/historialkm',  function () {
     $vehiculos = Vehiculo::get(['id', 'placa', 'tipo_vehiculo', 'km_actual', 'marca', 'modelo']);
     return view('admin.informes.km', compact('vehiculos'));
-})->name('historialkm');
+})->name('historialkm')->middleware('can:isGerente');
 
-Route::get('/historialkm/descargar', 'LavadoController@download')->name('historialkm.descargar');
+Route::get('/historialkm/descargar', 'LavadoController@download')->name('historialkm.descargar')->middleware('can:isGerente');
 
 
 
 //index de todos los matenimientos
-Route::get('/Ejecutado/alls', 'HistorialREController@alls')->name('ejecutados.alls');
-Route::get('/proveedores/select2', 'ProveedorController@select2');
+Route::get('/Ejecutado/alls', 'HistorialREController@alls')->name('ejecutados.alls')->middleware('can:isGerente');
+Route::get('/proveedores/select2', 'ProveedorController@select2')->middleware('can:isGerente');
 
 //Hallazgos
-Route::resource('/hallazgos', 'HallazgoController', ['except' => 'show', 'update', 'index']);
-Route::get('/hallazgos/{placa}', 'HallazgoController@index');
-Route::patch('/hallazgos/update', 'HallazgoController@update')->name('hallazgos.update');
+Route::resource('/hallazgos', 'HallazgoController', ['except' => 'show', 'update', 'index'])->middleware('can:isManagmentMantenimientos');;
+Route::get('/hallazgos/{placa}', 'HallazgoController@index')->middleware('can:isManagmentMantenimientos');
+Route::patch('/hallazgos/update', 'HallazgoController@update')->name('hallazgos.update')->middleware('can:isManagmentMantenimientos');
 
 //Notificar
 Route::get('/notificar/km', 'NotifyFechaController@mostrarkm')->name('notifica.km');
@@ -278,39 +166,68 @@ Route::get('/notificar/dias', 'NotifyFechaController@mostrardias')->name('notifi
 Route::get('/notificar/fc', 'NotifyFechaController@mostrarfc')->name('notifica.fc');
 
 //Perfil del vehiclo 
-Route::resource('/perfils', 'PerfilController', ['except' => 'update']);
+Route::resource('/perfils', 'PerfilController', ['except' => 'update'])->middleware('can:isGerente');;
 
 //Piezas informe 
-Route::get('/piezas/informe', 'DescargaController@piezas')->name('piezas.informe');
-Route::get('/download/informes', 'DescargaController@documentos')->name('documentos.todos');
+Route::get('/piezas/informe', 'DescargaController@piezas')->name('piezas.informe')->middleware('can:isGerente');
+Route::get('/download/informes', 'DescargaController@documentos')->name('documentos.todos')->middleware('can:isGerente');
 
-Route::get('/search/vehiculo', 'VehiculoController@search')->name('vehiculo.buscar');
+Route::get('/search/vehiculo', 'VehiculoController@search')->name('vehiculo.buscar')->middleware('can:isGerente');
 
-Route::get('descargas/cv/{vehiculo}', 'DescargaController@cv');
+Route::get('descargas/cv/{vehiculo}', 'DescargaController@cv')->middleware('can:isGerente');
 
 //Conductores
-Route::resource('/conductores', 'ConductorController', ['except' => 'update']);
-Route::get('/conductor/detalles/{id?}', 'ConductorController@detalles');
-Route::patch('/conductores/update', 'ConductorController@update')->name('conductores.update');
+Route::resource('/conductores', 'ConductorController', ['except' => 'update'])->middleware('can:isManagmentDrivers');
+Route::get('/conductor/detalles/{id?}', 'ConductorController@detalles')->middleware('can:isManagmentDrivers');
+Route::patch('/conductores/update', 'ConductorController@update')->name('conductores.update')->middleware('can:isManagmentDrivers');
 
 //Administradores
-Route::resource('/admins', 'AdminController', ['except' => 'update']);
-Route::patch('/admins/update', 'AdminController@update')->name('admins.update');
+Route::resource('/admins', 'AdminController', ['except' => 'update'])->middleware('can:isSuperGerente');;
+Route::patch('/admins/update', 'AdminController@update')->name('admins.update')->middleware('can:isSuperGerente');
 
 //clientes company
-Route::resource('/clientescompany', 'ClienteCompanyController', ['except' => 'update']);
-Route::patch('/clientescompany/update', 'ClienteCompanyController@update')->name('clientescompany.update');
+Route::resource('/clientescompany', 'ClienteCompanyController', ['except' => 'update'])->middleware('can:isManagmentClientesCompany');;
+Route::patch('/clientescompany/update', 'ClienteCompanyController@update')->name('clientescompany.update')->middleware('can:isManagmentClientesCompany');
 
 //Designados BY company
-Route::resource('/designados', 'DesignadoByCompanyController', ['except' => 'update']);
-Route::patch('/designados/update', 'DesignadoByCompanyController@update')->name('designados.update');
+Route::resource('/designados', 'DesignadoByCompanyController', ['except' => 'update'])->middleware('can:isClienteCompany');
+Route::patch('/designados/update', 'DesignadoByCompanyController@update')->name('designados.update')->middleware('can:isClienteCompany');
+//Designados BY company
+Route::resource('/servicios', 'ServicioController', ['except' => 'update'])->middleware('can:isManagmentServices');
+Route::patch('/servicios/update', 'ServicioController@update')->name('servicios.update')->middleware('can:isManagmentServices');
 
 //Designados BY company
-Route::resource('/servicios', 'ServicioController', ['except' => 'update']);
-Route::patch('/servicios/update', 'ServicioController@update')->name('servicios.update');
+Route::resource('/solicitudes', 'SolicitudController', ['except' => 'update'])->middleware('can:isManagmentServices');;
+Route::patch('/solicitudes/update', 'SolicitudController@update')->name('solicitudes.update')->middleware('can:isManagmentServices');
+
+Route::get('/servicio/detalles/{id?}', 'ServicioController@detalles')->middleware('can:isManagmentServices');
+
+Route::post('/solicitud-servicio', 'ServicioController@saveSolicitud')->middleware('can:isManagmentServices');
+
+Route::view('servicios-register', '/admin/servicios/formRegister')->middleware('can:isManagmentServices');
 
 //Designados BY company
-Route::resource('/solicitudes', 'SolicitudController', ['except' => 'update']);
-Route::patch('/solicitudes/update', 'SolicitudController@update')->name('solicitudes.update');
+Route::resource('/passengers', 'PassengerController', ['except' => 'update'])->middleware('can:isManagmentPassengers');
+Route::patch('/passengers/update', 'PassengerController@update')->name('passengers.update')->middleware('can:isManagmentPassengers');
 
-Route::get('/servicio/detalles/{id?}', 'ServicioController@detalles');
+//View register service
+Route::view('/register-service', 'admin.servicios.formRegister')->middleware('can:isManagmentServices');
+
+Route::resource('/emergencycontacts', 'EmergencyContactController', ['except' => 'update'])->middleware('can:isManagmentDrivers');
+Route::patch('/emergencycontacts/update', 'EmergencyContactController@update')->name('emergencycontacts.update')->middleware('can:isManagmentDrivers');
+
+//Designados BY company
+Route::resource('/documentcondutors', 'DocumentoConductorController', ['except' => 'update', 'show'])->middleware('can:isManagmentDrivers');;
+Route::patch('/documentcondutors/update', 'DocumentoConductorController@update')->name('documentcondutors.update')->middleware('can:isManagmentDrivers');
+
+
+Route::get('/getContacts/{id?}', 'EmergencyContactController@getContacts')->middleware('can:isManagmentDrivers');
+
+Route::get('/documentcondutors/{id}', 'DocumentoConductorController@show')->middleware('can:isManagmentDrivers');
+
+Route::get('/passengersOnService/{id}', 'ServicioController@showPassengers');
+Route::get('/passengersapi', 'PassengerController@passengersapi')->middleware('can:isManagmentPassengers');
+
+Route::post('/save-passengers-on-service', 'ServicioController@savePassengersOnService')->middleware('can:isManagmentPassengers');
+
+Route::post('/appendvehiculo', 'ConductorController@appendvehiculo')->name('appendvehiculo')->middleware('can:isManagmentDrivers');

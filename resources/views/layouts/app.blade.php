@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    {{-- <link href="{{asset('img/silpos.png')}}" rel="icon"> --}}
 
     <!-- CSRF Token -->
     <meta name="csrf-token" id="csrf_token" content="{{ csrf_token() }}">
@@ -25,14 +24,19 @@
     <link href="{{asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('css/ruang-admin.css')}}" rel="stylesheet">
 
+     @yield('styles')
+     
     <link href="{{asset('css/datatablecss/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('css/datatablecss/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('css/datatablecss/toastr.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('css/select2.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('css/panels.css')}}" rel="stylesheet" type="text/css" />
 
-
     <style>
+        .regiration_form fieldset:not(:first-of-type) {
+            display: none;
+        }
+
         table td {
             text-align: justify;
             font-size: 0.7rem;
@@ -87,12 +91,19 @@
     <script src="{{asset('js/datatablejs/dataTables.responsive.min.js')}}"></script>
     <script src="{{asset('js/datatablejs/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{asset('js/datatablejs/toastr.min.js')}}"></script>
-
+    <script src="{{asset('js/axios.min.js')}}"></script>
     <script src="{{ asset('/js/puntitos.js') }}"></script>
     <script src="{{ asset('/js/notificar.js') }}"></script>
     <script src="{{ asset('/js/select2.min.js') }}"></script>
 
     <script>
+        $('#pasajeros').select2({
+            
+            theme: "classic",
+            width: 'resolve' // need to override the changed default
+
+        });
+
         $('.select-modalVehiculoRegister-propietario').select2({
             dropdownParent: $("#modalVehiculoRegister"),
             theme: "classic",
@@ -120,6 +131,10 @@
         });
         $('.select-modalElementoUpdate-estado').select2({
             dropdownParent: $("#modalElementoUpdate"),
+            theme: "classic",
+            width: 'resolve',
+        });
+        $('.selectoncards').select2({
             theme: "classic",
             width: 'resolve',
         });
