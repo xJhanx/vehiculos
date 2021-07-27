@@ -41,3 +41,5 @@ fetch(url, {
         console.log('request failed');
     });
 // };
+
+console.log("assdasd");

@@ -76,7 +76,7 @@
                         <select class="selectpicker form-control" data-live-search="true" disabled="true"  name="vehiculo_id"
                             id="vehiculo_id">
                             <option selected>Seleccione</option>
-                            @foreach ($vehiculos as $item)
+                            @foreach ($servicio->conductor->vehiculos as $item)
                             <option value="{{$item->id}}">{{$item->placa }}</option>
                             @endforeach
                         </select>
