@@ -24,7 +24,8 @@ Clientes pueden ver mas informacion del vehiculo.
 > Informacion del vehiculo 
 > Foto del vehiculo
 
->> No se actualiza estado del servicio al cambiar por el conductor, no visualiza el administrador // actualiza, pero falta que no lo vea el administrador y el select muestre los vehiculos cuando seleccione al conductor. 
+# No se actualiza estado del servicio al cambiar por el conductor,
+>>  no visualiza el administrador // 
 
 
 >> Observaciones del conductor solo las debe ver rio grande, no el cliente / compañias

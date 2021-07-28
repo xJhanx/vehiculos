@@ -1,9 +1,11 @@
-const url = '/servicios/' + window.location.pathname.split('/')[3] + '/edit'
+const url = '/servicios/' + window.location.pathname.split('/')[3] + '/edit';
+/* const id = url.split('/')[2]; */
 const formServicioUpdate = document.getElementById('formServiceUpdate');
 
-console.log(formServicioUpdate);
+//console.log(formServicioUpdate);
 
-const span = document.getElementById('test');
+// const span = document.getElementById('test');
+
 fetch(url, {
     method: 'GET',
     mode: "cors",
@@ -33,6 +35,7 @@ fetch(url, {
                 if (typeof formServicioUpdate.observaciones_conductor != 'undefined') {
                     formServicioUpdate.observaciones_conductor.value = success.observaciones_conductor
                 }
+                /*      console.log(success);  */
 
             });
         }
@@ -42,4 +45,41 @@ fetch(url, {
     });
 // };
 
-console.log("assdasd");
+
+//fech de el select vehiculo
+const select = document.querySelector("#conductor_id");
+
+select.addEventListener("change", function () {
+    const id = document.querySelector("#conductor_id").value;
+    const urlSelect = "http://vehiculos-main.test/detalleSelect/" + id;
+
+    fetch(urlSelect, {
+        method: 'GET',
+        mode: "cors",
+        headers: {
+            accept: "application/json"
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                response.json().then(success => {
+                    console.log(success);
+                    const array = success;
+                    const $select = document.querySelector("#vehiculo_id");
+                    for(let i = success.length+1; i >= 0; i--) {
+                        $select.remove(i);
+                    }
+                    for(let i = 0; i < success.length; i++) {
+                        const option = document.createElement('option');
+                        option.value = success[i].vehiculo_id;
+                        option.text = success[i].placa;
+                        $select.appendChild(option);
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.log('request failed');
+        });
+
+});

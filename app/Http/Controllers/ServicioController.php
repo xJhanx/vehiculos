@@ -240,6 +240,15 @@ class ServicioController extends Controller
             'servicio' =>  Servicio::with(['conductor', 'conductor.vehiculos'])->find($id)
         ]);
     }
+    public function detalleSelect($id)
+    {
+        /* return  Servicio::with(['conductor', 'conductor.vehiculos'])->find($id); */
+       /*  return DB::select("select v.placa,cv.vehiculo_id FROM vehiculos v INNER JOIN 
+        conductor_vehiculo cv ON v.id=cv.vehiculo_id WHERE cv.conductor_id = $id"); */
+        return DB::connection('company')->select('select v.placa,cv.vehiculo_id FROM vehiculos v INNER JOIN 
+        conductor_vehiculo cv ON v.id=cv.vehiculo_id WHERE cv.conductor_id ='.$id);
+
+    }
 
     public function saveSolicitud(Request $request)
     {

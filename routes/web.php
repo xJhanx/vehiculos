@@ -196,6 +196,11 @@ Route::patch('/designados/update', 'DesignadoByCompanyController@update')->name(
 Route::resource('/servicios', 'ServicioController', ['except' => 'update'])->middleware('can:isManagmentServices');
 Route::patch('/servicios/update', 'ServicioController@update')->name('servicios.update')->middleware('can:isManagmentServices');
 
+//{}
+Route::get("/detalleSelect/{id?}", 'ServicioController@detalleSelect');
+//[]
+
+
 //Designados BY company
 Route::resource('/solicitudes', 'SolicitudController', ['except' => 'update'])->middleware('can:isManagmentServices');;
 Route::patch('/solicitudes/update', 'SolicitudController@update')->name('solicitudes.update')->middleware('can:isManagmentServices');
