@@ -15,8 +15,8 @@ Designados > Las cuentas que crean las compañias y que pueden generar servicios
 La clave al ingresar un usuario / compañia nueva, es el numero de identificacion, usuario correo electronico
 
 # Cambiar contraseña pendiente  //  ok 
->> Superusuario y administradores pueden visualizar los designados por compañia 
-# >> No registrar 2 veces usuario, validar por cedula 
+# >> Superusuario y administradores pueden visualizar los designados por compañia ok
+# >> No registrar 2 veces usuario, validar por cedula ok
 
 # Punto inicio en servicios >> sale correo electronico en lugar de punto de inicio /// ok 
 

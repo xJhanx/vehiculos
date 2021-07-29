@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class DesignadoByCompanyController extends Controller
 {
@@ -50,7 +51,7 @@ class DesignadoByCompanyController extends Controller
 
         if ($request->expectsJson()) {
             try {
-                
+
                 $designado = Designado::create(request()->all());
                 $admin = ClienteCompany::find(Auth::user()->funcionario_id);
                 $designado->empresa = $admin->identificacion;
@@ -142,5 +143,19 @@ class DesignadoByCompanyController extends Controller
         }
 
         return abort(404);
+    }
+
+    public function viewDesignadosAll()
+    {
+
+        return view('admin.designados.allDesignados');
+    }
+    public function designadosAll()
+    {
+        /*         return Designado::All(); */
+        return datatables(DB::connection('company')->select('SELECT d.nombre AS nombreDesignado,d.apellido,d.telefono,d.email,d.direccion,d.barrio,d.ciudad,cc.nombre AS nombreCompany FROM designados d INNER JOIN cliente_companies cc
+        ON cc.identificacion=d.empresa'))
+            ->addIndexColumn()
+            ->toJson();
     }
 }

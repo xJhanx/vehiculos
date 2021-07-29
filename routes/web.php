@@ -193,7 +193,11 @@ Route::resource('/clientescompany', 'ClienteCompanyController', ['except' => 'up
 Route::patch('/clientescompany/update', 'ClienteCompanyController@update')->name('clientescompany.update')->middleware('can:isManagmentClientesCompany');
 
 //Designados BY company
-Route::resource('/designados', 'DesignadoByCompanyController', ['except' => 'update'])->middleware('can:isClienteCompany');
+Route::resource('/designados', 'DesignadoByCompanyController', ['except' => 'update'])->middleware('can:verDesignados');
+//{
+    Route::get('/viewDesignadosAll', 'DesignadoByCompanyController@viewDesignadosAll')->name('viewDesignadosAll')->middleware('can:allDesignados');
+    Route::get('/designadosAll', 'DesignadoByCompanyController@designadosAll')->name('allDesignados')->middleware('can:allDesignados');
+//}
 Route::patch('/designados/update', 'DesignadoByCompanyController@update')->name('designados.update')->middleware('can:isClienteCompany');
 //Designados BY company
 Route::resource('/servicios', 'ServicioController', ['except' => 'update'])->middleware('can:isManagmentServices');
