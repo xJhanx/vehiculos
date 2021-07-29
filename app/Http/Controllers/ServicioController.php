@@ -236,9 +236,11 @@ class ServicioController extends Controller
     public function detalles(Request $request, $id)
     {
         return view('admin.servicios.show', [
-            'conductores' =>  Conductor::get(['nombre', 'apellido',  'identificacion', 'id']),
+            'conductores' =>  Conductor::with('vehiculos')->get(['nombre', 'apellido',  'identificacion', 'id']),
             'servicio' =>  Servicio::with(['conductor', 'conductor.vehiculos'])->find($id)
         ]);
+/*         $r = Servicio::with(['conductor', 'conductor.vehiculos'])->find($id);
+        return $r->conductor_id; */
     }
     public function detalleSelect($id)
     {

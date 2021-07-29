@@ -161,3 +161,4 @@ function editarVehiculo(ente_id) {
     var url =  '/vehiculos/' + ente_id + '/edit'
     window.location.href = url;
 };
+console.log("hi");

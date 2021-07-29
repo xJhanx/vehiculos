@@ -24,14 +24,14 @@ class LavadoController extends Controller
      */
     public function index(Request $request, $vehiculo)
     {
-        if (request()->expectsJson()) {
+        // if (request()->expectsJson()) {
             return datatables()->of(Lavado::where('vehiculo_id', $vehiculo)
                 ->orderBy('id', 'DESC')->take(10)->get())
                 ->addColumn('action', 'admin.lavados.actions')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
-        }
+        // }
     }
 
     /**

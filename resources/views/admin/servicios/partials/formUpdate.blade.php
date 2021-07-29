@@ -87,7 +87,7 @@
                     <div class="form-group col-md-6">
                         <label for="observaciones">Observaciones</label>
                         <textarea type="text" class="form-control" id="observaciones" name="data[observaciones]"
-                            placeholder="Observaciones"></textarea>
+                            placeholder="Observaciones" ></textarea>
                     </div>
                 </div>
 

@@ -64,10 +64,13 @@ Route::resource('/propietarios', 'PropietarioController', ['except' => 'update']
 Route::patch('/propietarios/update', 'PropietarioController@update')->name('propietarios.update')->middleware('can:isGerente');
 
 //Locaciones
-Route::resource('/locacions', 'LocacionController', ['except' => 'update'])->middleware('can:isGerente');;
+Route::resource('/locacions', 'LocacionController', ['except' => 'update'])->middleware('can:isGerente');
 Route::patch('/locacions/update', 'LocacionController@update')->name('locacions.update')->middleware('can:isGerente');
 
 //Vehiculos
+//{
+    Route::get('/vehiculoService/{id}', 'VehiculoController@vehiculoCompany')->name('vehiculosCompany')->middleware('can:isClienteCompany');
+//}
 Route::resource('/vehiculos', 'VehiculoController', ['except' => 'update'])->middleware('can:isManagmentVehiculos');
 Route::patch('/vehiculos/update', 'VehiculoController@update')->name('vehiculos.update')->middleware('can:isManagmentVehiculos');
 Route::get('/vehiculos/getTotal/{id}', 'VehiculoController@getTotal')->middleware('can:isManagmentVehiculos');
@@ -196,9 +199,9 @@ Route::patch('/designados/update', 'DesignadoByCompanyController@update')->name(
 Route::resource('/servicios', 'ServicioController', ['except' => 'update'])->middleware('can:isManagmentServices');
 Route::patch('/servicios/update', 'ServicioController@update')->name('servicios.update')->middleware('can:isManagmentServices');
 
-//{}
+//{
 Route::get("/detalleSelect/{id?}", 'ServicioController@detalleSelect');
-//[]
+//}
 
 
 //Designados BY company
@@ -247,6 +250,8 @@ Route::get('/test', function(){
 });
 
 //Cambio de contraseña
+//{
 Route::get('/viewPassword','UserController@formReset')->name('resetPassword');
 Route::post('/resetPassword','UserController@ChangePassword')->name('reset');
+//}
 

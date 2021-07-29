@@ -29,6 +29,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('observacionConductor', function ($user) {
+            return  $user->role == 'superGerente' || $user->role == 'gerente' || $user->role == 'administrador' ;
+
+        });
+        Gate::define('vehiculoService', function ($user) {
+            return  $user->role == 'superGerente' || $user->role == 'gerente' || $user->role == 'administrador' ;
+
+        });
         Gate::define('isAdmin', function ($user) {
             return $user->role == 'administrador';
         });
@@ -58,11 +66,11 @@ class AuthServiceProvider extends ServiceProvider
         });
         
         Gate::define('isManagmentMantenimientos', function ($user) {
-            return  $user->role == 'superGerente' || $user->role == 'gerente' || $user->role == 'administrador' ;
+            return  $user->role == 'superGerente' || $user->role == 'gerente' || $user->role == 'administrador' || $user->role == 'cliente' || $user->role == 'conductor' ;
         });
         
         Gate::define('isManagmentVehiculos', function ($user) {
-            return  $user->role == 'superGerente' || $user->role == 'gerente' || $user->role == 'administrador' ;
+            return  $user->role == 'superGerente' || $user->role == 'gerente' || $user->role == 'administrador' /* || $user->role == 'cliente' */ ;
         });
         
         

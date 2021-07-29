@@ -208,4 +208,30 @@ class VehiculoController extends Controller
         }
         abort(404);
     }
+
+ 
+//{
+    public function vehiculoOfService(){
+        
+    }
+
+
+    public function vehiculoCompany(Request $request,$id) {
+        
+/*                 return datatables()->of(Vehiculo::query()->with('id',)->orderBy('id', 'DESC')->get())                 ->addColumn('action', 'admin.vehiculos.actions')
+        ->rawColumns(['action'])
+        ->addIndexColumn()
+        ->make(true);  */
+        /* return view('admin.vehiculos.vehiculoCompany'); */
+        $vehiculo = Vehiculo::with('propietario', 'perfil')->firstWhere('id',"=",$id);
+        if ($vehiculo) {
+            $proveedores = Proveedor::get();
+
+            $clientes = Cliente::query()->select('id', 'nombre', 'apellido')->get();
+            return view('admin.vehiculos.partials.formUpdate', compact('vehiculo', 'proveedores', 'clientes'));
+        }
+/*         return Vehiculo::query()->firstWhere('id',"=",$id); */
+    }
 }
+
+//}

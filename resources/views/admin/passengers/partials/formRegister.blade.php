@@ -90,7 +90,7 @@
                         </div>
 
                         <div class="form-group ">
-                            <input type="submit" class="btn btn-outline-info " id="btnSavePassenger" value="Enviar">
+                            <input type="submit" class="btn btn-outline-info " id="btnSavePassenger" value="Enviar" onclick="validEnvio()">
                             <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>

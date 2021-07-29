@@ -237,7 +237,10 @@ function ajaxFormUpdateConductor(event) {
         });
 }
 
+
 function verServicio(ente_id) {
     const url = '/servicio/detalles/' + ente_id + '';
     window.location.href = url;
 }
+
+console.log("ansdbakjsd");

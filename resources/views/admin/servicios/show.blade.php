@@ -76,7 +76,7 @@
     
 </script>
 
-<script defer>
+{{-- <script defer>
     const divPassengers = document.getElementById("checkPassengers");
     
     fetch('/passengers', {
@@ -112,6 +112,6 @@
 
     }
     });
-</script>
+</script> --}}
 
 @endsection

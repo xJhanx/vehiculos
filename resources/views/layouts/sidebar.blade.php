@@ -60,6 +60,11 @@
         Vehiculos
     </div>
 
+    {{-- @can('isClienteCompany')
+    <li class="nav-item "> <a class="nav-link text text-dark" href='{{route('vehiculosCompany')}}'><i
+                class="fa fa-users"></i> <small>Vehiculos</small></a> </li>
+    @endcan --}}
+    
     @can('isManagmentVehiculos')
     <li class="nav-item "> <a class="nav-link text text-dark" href='{{route('vehiculos.index')}}'><i
                 class="fa fa-users"></i> <small>Todos</small></a> </li>

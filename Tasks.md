@@ -2,7 +2,7 @@ Cuenta Superusuario
 User: gerentetrg@gmail.com
 Password: secret
 
-vista de pasajeros como las otras  y el modal de pasajeros //
+# vista de pasajeros como las otras  y el modal de pasajeros //
 
 Gerente > Superusuario PAPA DE TODOS
 
@@ -16,16 +16,15 @@ La clave al ingresar un usuario / compañia nueva, es el numero de identificacio
 
 # Cambiar contraseña pendiente  //  ok 
 >> Superusuario y administradores pueden visualizar los designados por compañia 
->> No registrar 2 veces usuario, validar por cedula 
+# >> No registrar 2 veces usuario, validar por cedula 
 
 # Punto inicio en servicios >> sale correo electronico en lugar de punto de inicio /// ok 
 
 Clientes pueden ver mas informacion del vehiculo.
-> Informacion del vehiculo 
-> Foto del vehiculo
+# > Informacion del vehiculo ok 
+# > Foto del vehiculo ok
 
-# No se actualiza estado del servicio al cambiar por el conductor,
->>  no visualiza el administrador // 
+# No se actualiza estado del servicio al cambiar por el conductor, no visualiza el administrador // ok
 
 
->> Observaciones del conductor solo las debe ver rio grande, no el cliente / compañias
+# Observaciones del conductor solo las debe ver rio grande, no el cliente / compañias
