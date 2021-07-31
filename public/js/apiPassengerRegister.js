@@ -66,3 +66,4 @@ function ajaxFormRegisterPassenger(event) {
             console.log('request failed', error);
         });
 }
+console.log('runnig');

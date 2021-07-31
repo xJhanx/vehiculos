@@ -69,7 +69,7 @@ Route::patch('/locacions/update', 'LocacionController@update')->name('locacions.
 
 //Vehiculos
 //{
-    Route::get('/vehiculoService/{id}', 'VehiculoController@vehiculoCompany')->name('vehiculosCompany')->middleware('can:isClienteCompany');
+    Route::get('/vehiculoService/{id}', 'VehiculoController@vehiculoCompany')->name('vehiculosCompany')->middleware('can:infoVehiculo');
 //}
 Route::resource('/vehiculos', 'VehiculoController', ['except' => 'update'])->middleware('can:isManagmentVehiculos');
 Route::patch('/vehiculos/update', 'VehiculoController@update')->name('vehiculos.update')->middleware('can:isManagmentVehiculos');

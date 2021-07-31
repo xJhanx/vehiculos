@@ -50,7 +50,7 @@ class ConductorController extends Controller
         if ($request->expectsJson()) {
             try {
                 $conductor = Conductor::create(request()->all());
-                 User::create([
+                User::create([
                     'name' => request()->get('email'),
                     'company' => Auth::user()->company,
                     'email' => request()->get('email'),
@@ -102,23 +102,23 @@ class ConductorController extends Controller
 
         //     ]
 
-            // [
-            //     'identificacion.digits_between' => 'El numero de identificacion debe contener entre 1 y 10 numeros',
-            //     'identificacion.unique' => 'El numero de identificacion ya se encuentra registrado',
-            // ]
+        // [
+        //     'identificacion.digits_between' => 'El numero de identificacion debe contener entre 1 y 10 numeros',
+        //     'identificacion.unique' => 'El numero de identificacion ya se encuentra registrado',
+        // ]
         // );
-        
+
         // if ($request->expectsJson()) {
-            try {
-                $cliente = Conductor::findOrFail($request->id);
-                $cliente->update(request()->all());
-                if ($cliente) {
-                    // return response('Conductor actualizado correctamente', 200);
-                    return back();
-                }
-                return response('No hemos podido actualizar el cliente', 500);
-            } catch (\Throwable $th) {
-                return  response($th->getMessage());
+        try {
+            $cliente = Conductor::findOrFail($request->id);
+            $cliente->update(request()->all());
+            if ($cliente) {
+                // return response('Conductor actualizado correctamente', 200);
+                return back();
+            }
+            return response('No hemos podido actualizar el cliente', 500);
+        } catch (\Throwable $th) {
+            return  response($th->getMessage());
             // }
         }
         // return abort(404);
@@ -140,27 +140,41 @@ class ConductorController extends Controller
     }
     public function detalles(Request $request, $id)
     {
-        return view('admin.conductores.show', 
-        [
-          'conductor' =>   Conductor::with('servicios', 
-          'servicios.empresa', 
-          'servicios.vehiculo', 
-          'servicios.passengers',
-          'vehiculos'
-          )->findOrFail($id),
-          'vehiculos' =>   Vehiculo::get(['placa', 'id'])
-        ]);
+        return view(
+            'admin.conductores.show',
+            [
+                'conductor' =>   Conductor::with(
+                    'servicios',
+                    'servicios.empresa',
+                    'servicios.vehiculo',
+                    'servicios.passengers',
+                    'vehiculos'
+                )->findOrFail($id),
+                'vehiculos' =>   Vehiculo::get(['placa', 'id'])
+            ]
+        );
+/*          $r =    [
+            'conductor' =>   Conductor::with(
+                'servicios',
+                'servicios.empresa',
+                'servicios.vehiculo',
+                'servicios.passengers',
+                'vehiculos'
+            )->findOrFail($id),
+            'vehiculos' =>   Vehiculo::get(['placa', 'id'])
+            ];
+
+            return dd($r['conductor']['servicios'][0]['vehiculo']['placa']); */
     }
-    
-    
+
+
     public function appendvehiculo(Request $request)
     {
-        try{
+        try {
             $conductor = Conductor::findOrFail(request()->get('conductor_id'));
             $conductor->vehiculos()->attach([request()->get('placa')]);
             return back();
-            
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }
     }

@@ -28,3 +28,5 @@ Clientes pueden ver mas informacion del vehiculo.
 
 
 # Observaciones del conductor solo las debe ver rio grande, no el cliente / compañias
+
+gerente no puede crear designados 

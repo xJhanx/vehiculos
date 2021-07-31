@@ -15,6 +15,7 @@
                         <div class="row">
 
                             <input type="hidden" name="id_servicio" id="id_servicio">
+                            <h1>Hola </h1>
 
                             <div class="w-100"></div>
                             <div id="checkPassengers"></div>

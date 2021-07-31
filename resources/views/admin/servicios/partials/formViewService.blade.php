@@ -5,8 +5,6 @@
         <div class="container">
             <h5 class="my-2" style="font-weight:bold">Solicitud de servicio. </h5>
             <div class="progress">
-
-
             </div>
 
             <form id="formServiceUpdate" class="regiration_form" method="POST"
@@ -83,9 +81,9 @@
                                 <option value="{{ $item->id }}">{{ $item->placa }}</option>
                             @endforeach
                         </select>
-                        @can('isClienteCompany')
-                        @endcan
+                        @can('infoVehiculo')
                         <button type="button" class="btn btn-outline-primary mt-2" onclick="verVehiculo()">Ver vehiculo</button>
+                        @endcan
 
                     </div>
 

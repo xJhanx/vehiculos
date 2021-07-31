@@ -8,10 +8,10 @@
         <i class="fa fa-reply text-info"></i>
     </a>
 
-    <a href="javascript:void(0)" class="tooltip-wrapper" data-toggle="modal" data-placement="top"
+{{--     <a href="javascript:void(0)" class="tooltip-wrapper" data-toggle="modal" data-placement="top"
         data-target="#modalDesignadoRegister" title="Registrar">
         <i class="fa fa-edit btn btn-icon text-success"></i>
-    </a>
+    </a> --}}
 
     <h5 class="m-2">
         <i class="fa fa-group"></i> Designados

@@ -243,4 +243,7 @@ function verServicio(ente_id) {
     window.location.href = url;
 }
 
-console.log("ansdbakjsd");
+function validEnvio(){
+    button = document.querySelector("#btnSavePassenger");
+    button = disabled = "true";
+}
