@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Admin extends Model
 {
-    protected $connection = 'company';
+    protected $connection = 'company'; 
 
     public function getRouteKeyName()
     {

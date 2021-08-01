@@ -8,6 +8,7 @@ use App\Passenger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\ClienteCompany;
+use Illuminate\Support\Facades\DB;
 
 class PassengerController extends Controller
 {
@@ -23,7 +24,7 @@ class PassengerController extends Controller
     {
         // return response()->json(['passengers' => Passenger::where('empresa', $this->getEmpresa())->latest()->get()], 200);
         if ($request->expectsJson()) {
-            return datatables(Passenger::where('empresa',$this->getEmpresa())->latest()->get())
+            return datatables(Passenger::where('empresa', $this->getEmpresa())->latest()->get())
                 ->addColumn('action', 'admin.passengers.actions')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
@@ -66,12 +67,30 @@ class PassengerController extends Controller
 
     public function store(Request $request)
     {
-        $passenger = Passenger::create(request()->all());
-        $passenger->empresa = $this->getEmpresa();
-        $passenger->save();
+        
+        $email = $request->email;
+        $id = $request->identificacion;
+        $response = DB::connection('company')->select("SELECT id FROM passengers WHERE email= '$email' OR identificacion = '$id'");
+        
+        try {
+            if($request->expectsJson()){
 
-        if (request()->expectjson) {
-            return response()->json(['passengers' => Passenger::where('empresa', $this->getEmpresa())->latest()->get()], 201);
+                if ($response) {
+                    throw new \Exception("La identificacion o correo ya existen");
+                }
+                
+                $passenger = Passenger::create(request()->all());
+                $passenger->empresa = $this->getEmpresa();
+                $passenger->save();
+                
+                return response()->json("Pasajero agregado correctamente",200);
+                /*             if (request()->expectjson) {
+                    return response()->json(['passengers' => Passenger::where('empresa', $this->getEmpresa())->latest()->get()], 201);
+                } */
+                
+            }
+        } catch (\Throwable $th) {
+            return  response()->json($th->getMessage(), 400);
         }
 
         return back();

@@ -84,30 +84,38 @@ function ajaxFormRegisterConductor(event) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     })
-        .then(response => {
-            if (response.ok) {
-                response.text().then(success => {
-                    toastr.info('Success:', success);
-                    dtConductores.draw();
-                    document.getElementById("btnSaveConductor").value = "Enviar";
-                    $('#formConductorRegister').trigger("reset");
-                    $('#modalConductorRegister').modal('hide');
-                });
-            } else {
-                throw response.json().then(error => {
+    .then(response => {
+        if (response.ok) {
+            response.text().then(success => {
+                toastr.info('Success:', success);
+                dtAdmins.draw();
+                document.getElementById("btnSaveAdmin").value = "Enviar";
+                $('#formAdminRegister').trigger("reset");
+                $('#modalAdminRegister').modal('hide');
+            });
+
+        } else {
+            throw response.text().then(error => {
+                console.log(error);
+                if (error.errors) {
                     for (var clave in error.errors) {
-                        let container = formConductorRegister.elements.namedItem(clave);
+                        let container = formAdminRegister.elements.namedItem(clave);
                         container.classList.add('is-invalid');
                         toastr.error(`<li> ${error.errors[clave]} </li>`);
                     }
+                }
+                else {
+                    toastr.warning('Warning:', error);
+                }
+                document.getElementById("btnSaveConductor").value = "Enviar";
+            })
+        }
+    })
+    .catch(res => {
+        (console.log('request failed', res))
+        
+    });
 
-                    document.getElementById("btnSaveConductor").value = "Enviar";
-                })
-            }
-        })
-        .catch(res => {
-            (console.log('request failed', res))
-        });
 }
 
 
@@ -210,6 +218,7 @@ function ajaxFormUpdateConductor(event) {
         .then(response => {
             if (response.ok) {
                 response.text().then(success => {
+                    
                     toastr.info('Success:', success);
                     dtConductores.draw();
                     $('#formConductorUpdate').trigger("reset");

@@ -36,17 +36,17 @@
 
                             <div class="form-group col-md-6">
                                 <label class="text-dark"># Identificacion</label>
-                                <input type="number" class="form-control" name="identificacion" placeholder="">
+                                <input type="number" class="form-control" name="identificacion" placeholder="" required="">
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label class="text-dark">Cargo</label>
-                                <input type="text" class="form-control" name="cargo" placeholder="">
+                                <input type="text" class="form-control" name="cargo" placeholder="" required>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label class="text-dark">Mail </label>
-                                <input type="email" class="form-control" name="email" placeholder="E-mail">
+                                <input type="email" class="form-control" name="email" placeholder="E-mail" required="">
                             </div>
 
 
@@ -90,7 +90,7 @@
                         </div>
 
                         <div class="form-group ">
-                            <input type="submit" class="btn btn-outline-info " id="btnSavePassenger" value="Enviar" {{-- onclick="ajaxFormRegisterPassenger()" --}}>
+                            <input type="submit" class="btn btn-outline-info " id="btnSavePassenger" value="Enviar" onclick="ajaxFormRegisterPassenger(event)">
                             <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
@@ -99,3 +99,4 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('/js/apiPassengerRegister.js') }}"></script>

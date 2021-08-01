@@ -92,20 +92,33 @@ function ajaxFormRegisterAdmin(event) {
                     $('#formAdminRegister').trigger("reset");
                     $('#modalAdminRegister').modal('hide');
                 });
+
             } else {
                 throw response.json().then(error => {
-                    for (var clave in error.errors) {
-                        let container = formAdminRegister.elements.namedItem(clave);
-                        container.classList.add('is-invalid');
-                        toastr.error(`<li> ${error.errors[clave]} </li>`);
+                    if (error.errors) {
+                        for (var clave in error.errors) {
+                            let container = formAdminRegister.elements.namedItem(clave);
+                            container.classList.add('is-invalid');
+                            toastr.error(`<li> ${error.errors[clave]} </li>`);
+                        }
                     }
-
-                    document.getElementById("btnSaveAdmin").value = "Enviar";
+                    else {
+                        toastr.warning('Warning:', error);
+                    }
+                    buton = document.getElementById("btnSaveAdmin").value = "Enviar";
+                    /* buton.disabled = true; */
                 })
             }
         })
         .catch(res => {
-            (console.log('request failed', res))
+
+            // res.text().then(success => {
+            //     toastr.danger('Warning:', success);
+            // });
+            // res.json().then(error => {
+            // (console.log('request failed', error))
+            //  })
+
         });
 }
 
@@ -169,12 +182,12 @@ function editarAdmin(ente_id) {
                     formAdminUpdate.inicio_contrato.value = success.inicio_contrato;
                     formAdminUpdate.fin_contrato.value = success.fin_contrato;
                     formAdminUpdate.renovacion_contrato.value = success.renovacion_contrato;
-                    
+
                     formAdminUpdate.eps.value = success.eps;
                     formAdminUpdate.arl.value = success.arl;
                     formAdminUpdate.cc.value = success.cc;
                     formAdminUpdate.email.value = success.email;
-                    
+
                     formAdminUpdate.tipo_identificacion.value = success.tipo_identificacion;
                     formAdminUpdate.identificacion.value = success.identificacion;
                     formAdminUpdate.direccion.value = success.direccion;

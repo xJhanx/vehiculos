@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
 
 
 class ConductorController extends Controller
@@ -46,9 +48,17 @@ class ConductorController extends Controller
      */
     public function store(ConductorSaveRequest $request)
     {
+        $email = $request->email;
+        $id = $request->identificacion;
 
-        if ($request->expectsJson()) {
-            try {
+        try {
+            if ($request->expectsJson()) {
+                $response = DB::connection('company')->select("SELECT id FROM conductors WHERE email= '$email' OR identificacion = '$id'");
+
+                if ($response) {
+                    throw new \Exception("La identificacion o correo ya existen");
+                }
+
                 $conductor = Conductor::create(request()->all());
                 User::create([
                     'name' => request()->get('email'),
@@ -59,9 +69,9 @@ class ConductorController extends Controller
                     'funcionario_id' => $conductor->id,
                 ]);
                 return response('Conductor registrado correctamente', 200);
-            } catch (\Throwable $th) {
-                return  response($th->getMessage(), 500);
             }
+        } catch (\Throwable $th) {
+            return  response($th->getMessage(), 400);
         }
         return abort(404);
     }
@@ -113,8 +123,8 @@ class ConductorController extends Controller
             $cliente = Conductor::findOrFail($request->id);
             $cliente->update(request()->all());
             if ($cliente) {
-                // return response('Conductor actualizado correctamente', 200);
-                return back();
+                return response('Conductor actualizado correctamente', 200);
+                // return back();
             }
             return response('No hemos podido actualizar el cliente', 500);
         } catch (\Throwable $th) {
@@ -153,7 +163,7 @@ class ConductorController extends Controller
                 'vehiculos' =>   Vehiculo::get(['placa', 'id'])
             ]
         );
-/*          $r =    [
+        /*          $r =    [
             'conductor' =>   Conductor::with(
                 'servicios',
                 'servicios.empresa',

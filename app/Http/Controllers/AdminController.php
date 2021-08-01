@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
 
 class AdminController extends Controller
 {
@@ -44,10 +46,17 @@ class AdminController extends Controller
      */
     public function store(AdminSaveRequest $request)
     {
+        $email = $request->email;
+        $id = $request->identificacion;
+        
+        try {
+            if ($request->expectsJson()) {
+                $response = DB::connection('company')->select("SELECT id FROM admins WHERE email= '$email' OR identificacion = '$id'");
 
-        if ($request->expectsJson()) {
-            try {
+                if ($response) {throw new \Exception("La identificacion o correo ya existen");}
+
                 $admin =  Admin::create(request()->all());
+
                 User::create([
                     'name' => request()->get('email'),
                     'company' => Auth::user()->company,
@@ -56,12 +65,12 @@ class AdminController extends Controller
                     'role' => 'administrador',
                     'funcionario_id' => $admin->id,
                 ]);
+
                 return response('Admin registrado correctamente', 200);
-            } catch (\Throwable $th) {
-                return  response($th->getMessage(), 500);
             }
+        } catch (\Throwable $th) {
+            return  response()->json($th->getMessage(), 400);
         }
-        return abort(404);
     }
 
     /**

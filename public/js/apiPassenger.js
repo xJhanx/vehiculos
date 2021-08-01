@@ -99,6 +99,67 @@ document.addEventListener('DOMContentLoaded', function () {
 //         });
 // }
 
+
+//Crear pasajeros como company
+function ajaxFormRegisterPassenger(event) {
+    event.preventDefault();
+
+    document.getElementById("btnSavePassenger").value = "Enviar";
+
+    const divPassengers = document.getElementById("checkPassengers");
+
+    const dataRegister = new FormData(formPassengerRegister);
+
+    if (document.querySelector('.is-invalid')) {
+        document.querySelector('.is-invalid').classList.remove('is-invalid');
+    }
+
+    fetch(formPassengerRegister.action, {
+        method: 'POST',
+        body: dataRegister,
+        mode: "cors",
+        headers: {
+            accept: "application/json",
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            response.text().then(success => {
+                toastr.info('Success:', success);
+                dtPassengers.draw();
+                document.getElementById("btnSavePassenger").value = "Enviar";
+                $('#modalPassengerRegister').trigger("reset");
+                $('#modalPassengerRegister').modal('hide');
+            });
+
+        } else {
+            throw response.json().then(error => {
+                if (error.errors) {
+                    for (var clave in error.errors) {
+                        let container = formAdminRegister.elements.namedItem(clave);
+                        container.classList.add('is-invalid');
+                        toastr.error(`<li> ${error.errors[clave]} </li>`);
+                    }
+                }
+                else {
+                    toastr.warning('Warning:', error);
+                }
+                buton = document.getElementById("btnSavePassenger").value = "Enviar";
+                /* buton.disabled = true; */
+            })
+        }
+    }).catch(res => {
+            // res.text().then(success => {
+            //     toastr.danger('Warning:', success);
+            // });
+            // res.json().then(error => {
+            // (console.log('request failed', error))
+            //  })
+
+        });
+}
+
 //Eliminar Propietario
 function eliminarPassenger(ente_id) {
     toastr.options.preventDuplicates = true; 

@@ -95,18 +95,22 @@ function ajaxFormRegisterDesignado(event) {
                 });
             } else {
                 throw response.json().then(error => {
-                    for (var clave in error.errors) {
-                        let container = formDesignadoRegister.elements.namedItem(clave);
-                        container.classList.add('is-invalid');
-                        toastr.error(`<li> ${error.errors[clave]} </li>`);
-                    }
+                    if (error.errors) {
 
-                    document.getElementById("btnSaveDesignado").value = "Enviar";
+                        for (var clave in error.errors) {
+                            let container = formDesignadoRegister.elements.namedItem(clave);
+                            container.classList.add('is-invalid');
+                            toastr.error(`<li> ${error.errors[clave]} </li>`);
+                        }
+                    } else {
+                        toastr.warning('Warning:', error);
+                        document.getElementById("btnSaveDesignado").value = "Enviar";
+                    }
                 })
             }
         })
         .catch(res => {
-            (console.log('request failed', res))
+            /* (console.log('request failed', res)) */
         });
 }
 

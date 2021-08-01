@@ -48,9 +48,16 @@ class DesignadoByCompanyController extends Controller
      */
     public function store(DesignadoSaveRequest $request)
     {
+        $email = $request->email;
+        $id = $request->identificacion;
 
-        if ($request->expectsJson()) {
-            try {
+        try {
+            if ($request->expectsJson()) {
+                $response = DB::connection('company')->select("SELECT id FROM designados WHERE email= '$email' OR identificacion = '$id'");
+                if ($response) {
+                    throw new \Exception("La identificacion o correo ya existen");
+                }
+
 
                 $designado = Designado::create(request()->all());
                 $admin = ClienteCompany::find(Auth::user()->funcionario_id);
@@ -67,9 +74,9 @@ class DesignadoByCompanyController extends Controller
                 ]);
 
                 return response('Designado registrado correctamente', 200);
-            } catch (\Throwable $th) {
-                return  response($th->getMessage(), 500);
             }
+        } catch (\Throwable $th) {
+            return  response()->json($th->getMessage(), 400);
         }
         return abort(404);
     }
@@ -139,7 +146,7 @@ class DesignadoByCompanyController extends Controller
         if ($request->expectsJson()) {
             $Designado = Designado::findOrFail($id)->delete();
             $User = User::firstWhere('funcionario_id', $id)->delete();
-            return response('Designado deleted successfully.');
+            return response()->json('Designado deleted successfully.', 200);
         }
 
         return abort(404);
